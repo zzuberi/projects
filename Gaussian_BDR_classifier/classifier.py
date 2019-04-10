@@ -45,6 +45,10 @@ class Classifier:
             self.mean.append(examples.mean(axis=1))
             self.variance.append(np.cov(examples))
             self.priors.append(class_examples.shape[0] / self.labels.shape[0])
+
+        self.mean = np.array(self.mean)
+        self.variance = np.array(self.variance)
+        self.priors = np.array(self.priors)
         print()
 
     def evaluate(self, data: np.ndarray, labels: np.ndarray) -> (float, np.ndarray):
@@ -85,3 +89,18 @@ class Classifier:
             out_class = np.where(pred[in_class] != cls)[0]
             pe.append(prior * out_class.size / in_class.size)
         return sum(pe)
+
+    def get_marginal_distributions(self, cls=None, dims=None):
+        if cls is None and dims is None:
+            return self.mean, self.variance
+
+        if cls is None:
+            cls = self.classes
+
+        if dims is None:
+            dims = range(0, self.data.shape[0])
+
+        means = self.mean[tuple(np.meshgrid(cls, dims, indexing='ij'))]
+        variance = self.variance[tuple(np.meshgrid(cls, dims, dims, indexing='ij'))]
+
+        return means, variance
