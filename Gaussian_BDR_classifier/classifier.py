@@ -10,7 +10,7 @@ class Classifier:
     Gaussian parameters are learned using Maximum Likelihood estimation using the training data.
     """
 
-    def __init__(self, data, labels):
+    def __init__(self, data: np.ndarray, labels: np.ndarray) -> None:
         """
         Constructor for Classifier class.
         :param data: dxn array containing n examples of dimensionality d
@@ -47,7 +47,7 @@ class Classifier:
             self.priors.append(class_examples.shape[0] / self.labels.shape[0])
         print()
 
-    def evaluate(self, data, labels):
+    def evaluate(self, data: np.ndarray, labels: np.ndarray) -> (float, np.ndarray):
         """
         Evaluate model on given test data and corresponding labels.
         :param data: dxn array containing n examples of dimensionality d
@@ -56,7 +56,7 @@ class Classifier:
                  predicted_labels: n array containing predicted integer labels corresponding to each example in test
                  data array
         """
-        assert (self.classes is not None or self.c is not None or self.n is not None or self.mean is not None or \
+        assert (self.classes is not None or self.c is not None or self.n is not None or self.mean is not None or
                 self.variance is not None or self.priors is not None), "Model must be trained first."
         print("Evaluating Model...")
         print()
@@ -65,13 +65,13 @@ class Classifier:
         for cls in tqdm(self.classes):
             post_prob[cls, :] = self.priors[cls] * mvn.pdf(data.T, self.mean[cls], self.variance[cls])
 
-        predicted_labels = post_prob.argmax(axis=0)
+        predicted_labels: np.ndarray = post_prob.argmax(axis=0)
 
         accuracy = sum(predicted_labels == labels) / n
         print()
         return accuracy, predicted_labels
 
-    def prob_of_error(self, gt, pred):
+    def prob_of_error(self, gt: np.ndarray, pred: np.ndarray) -> float:
         """
         Evaulates produces the probability of error given ground truth and predicted labels.
         :param gt: n array containing groundtruth labels
