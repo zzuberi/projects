@@ -51,11 +51,13 @@ class Classifier:
         self.priors = np.array(self.priors)
         print()
 
-    def evaluate(self, data: np.ndarray, labels: np.ndarray) -> (float, np.ndarray):
+    def evaluate(self, data: np.ndarray, labels: np.ndarray, dims=None) -> (float, np.ndarray):
         """
         Evaluate model on given test data and corresponding labels.
         :param data: dxn array containing n examples of dimensionality d
         :param labels: n array containing integer labels corresponding to each example in data array
+        :param dims: n array containing indexes for which dimensions to evaluate data on. Data will only be evaluated on
+        the specified dimensions usin the marginal distributions of those dimensions
         :returns accuracy: model accuracy on given test data
                  predicted_labels: n array containing predicted integer labels corresponding to each example in test
                  data array
@@ -64,10 +66,14 @@ class Classifier:
                 self.variance is not None or self.priors is not None), "Model must be trained first."
         print("Evaluating Model...")
         print()
+
+        mean, variance = self.get_marginal_distributions(dims=dims)
         n = data.shape[1]
         post_prob = np.zeros((self.c, n))
+        if dims is not None:
+            data = data[dims, :].copy()
         for cls in tqdm(self.classes):
-            post_prob[cls, :] = self.priors[cls] * mvn.pdf(data.T, self.mean[cls], self.variance[cls])
+            post_prob[cls, :] = self.priors[cls] * mvn.pdf(data.T, mean[cls], variance[cls])
 
         predicted_labels: np.ndarray = post_prob.argmax(axis=0)
 
