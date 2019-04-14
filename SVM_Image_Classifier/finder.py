@@ -8,8 +8,21 @@ from sklearn import svm
 
 
 class Finder:
+    """
+    This class creates a SVM single object identifier from a given set of training images and object locations.
+
+    Training data includes a set of images with the desired object within them.
+    Object locations should be given with unit normalized image coordinates (origin considered top left corner of image)
+    .
+    Object should have approximately similar size in all images.
+    """
 
     def __init__(self, data_path):
+        """
+        Constructor for Finder class.
+        :param data_path: string to the csv file with object locations within image. File format is as follows:
+        image_path, x-coordinate, y-coordinate
+        """
         self.hog = None
         self.data_path = data_path
         self.clf = None
@@ -19,13 +32,33 @@ class Finder:
     def set_hog_descriptor(self, b_h=36, b_w=36, block_size=(16, 16), block_stride=(8, 8), cell_size=(8, 8), nbins=9,
                            deriv_aperture=1, win_sigma=-1,
                            histogram_norm_type=0, l2_hys_threshold=.2, gamma_correction=True, nlevels=64):
+        """
+
+        :param b_h: desired window height of image detection block
+        :param b_w: desired window width of image detection block
+        :param block_size: see cv2.HOGDescriptor()
+        :param block_stride: see cv2.HOGDescriptor()
+        :param cell_size: see cv2.HOGDescriptor()
+        :param nbins: see cv2.HOGDescriptor()
+        :param deriv_aperture: see cv2.HOGDescriptor()
+        :param win_sigma: see cv2.HOGDescriptor()
+        :param histogram_norm_type: see cv2.HOGDescriptor()
+        :param l2_hys_threshold: see cv2.HOGDescriptor()
+        :param gamma_correction: see cv2.HOGDescriptor()
+        :param nlevels: see cv2.HOGDescriptor()
+        """
         self.b_h = b_h
         self.b_w = b_w
         win_size = (2 * self.b_h, 2 * self.b_w)
         self.hog = cv2.HOGDescriptor(win_size, block_size, block_stride, cell_size, nbins, deriv_aperture, win_sigma,
-                                 histogram_norm_type, l2_hys_threshold, gamma_correction, nlevels)
+                                     histogram_norm_type, l2_hys_threshold, gamma_correction, nlevels)
 
     def train(self):
+        """
+        Train SVM with given training data.
+
+        HOG Descriptor must be set prior to training.
+        """
         assert self.hog is not None
 
         data = self.__get_data__()
@@ -90,6 +123,12 @@ class Finder:
         return neg_samps
 
     def evaluate(self, img_path, stride=4):
+        """
+        Evaulate test image.
+        :param img_path: path to image for which objct needs to be identified
+        :param stride: desired stride for detection window
+        :return: returns numpy array of predicted [x, y]
+        """
         assert self.clf is not None
 
         img = cv2.imread(img_path)
@@ -113,9 +152,4 @@ class Finder:
         rect = cv2.boundingRect(np.array(conts))
         detection = np.array(((rect[0] + rect[2] / 2) / float(w), (rect[1] + rect[3] / 2) / float(h)))
 
-        # print(str(round(detection[0], 4))[:6] + ' ' + str(round(detection[1], 4))[:6])
         return np.array((round(detection[0], 4), round(detection[1], 4)))
-
-# if __name__ == "__main__":
-#     global data_path
-#     data_path = sys.argv[1]
