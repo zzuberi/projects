@@ -6,9 +6,27 @@ class DimReduce:
 
     def __init__(self):
         self.transform = None
+
+    def train(self, data):
+        raise NotImplementedError
+
+    def apply(self, data):
+        raise NotImplementedError
+
+
+class PCA(DimReduce):
+
+    def __init__(self):
+        super().__init__()
         self.s = None
         self.max_dim = None
         self.mu = None
+
+    def train(self, data, pca=1):
+        if pca == 1:
+            self.pca_1(data)
+        elif pca == 2:
+            self.pca_2(data)
 
     def pca_1(self, data):
         d = data.shape[0]
@@ -46,3 +64,30 @@ class DimReduce:
         x = x / denom
         plt.plot(x, range(self.max_dim))
         plt.show()
+
+
+class LDA(DimReduce):
+
+    def __init__(self):
+        super().__init__()
+
+    def train(self, data, labels, gamma=0):
+        classes = np.unique(labels)
+        classes.sort()
+        self.transform = []
+        for i, c in enumerate(classes):
+            cls1 = np.where(labels == c)[0]
+            for j in range(i + 1, classes.shape[0]):
+                cls2 = np.where(labels == classes[j])[0]
+                data1 = data[:, cls1]
+                data2 = data[:, cls2]
+                cov1 = np.cov(data1)
+                cov2 = np.cov(data2)
+                mu1 = np.mean(data1, axis=1)
+                mu2 = np.mean(data2, axis=1)
+                w = np.linalg.inv(cov1 + cov2 + gamma * np.eye(cov1.shape[0])) @ (mu1 - mu2)
+                self.transform.append(w)
+        self.transform = np.array(self.transform).squeeze()
+
+    def apply(self, data):
+        return self.transform @ data
