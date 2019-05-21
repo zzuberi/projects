@@ -5,7 +5,7 @@ class BinarySearch:
         if l > r:
             return -1
 
-        mid = int((l + r) / 2)
+        mid = (l + r) // 2
         if x < a[mid]:
             return BinarySearch.binarysearch(a, x, l, mid - 1)
         elif x > a[mid]:
