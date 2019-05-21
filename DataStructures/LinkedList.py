@@ -1,7 +1,7 @@
 class Node:
 
-    def __init__(self, value):
-        self.value = value
+    def __init__(self, val):
+        self.val = val
         self.next = None
 
 
@@ -12,28 +12,28 @@ class LinkedList:
         self.tail = None
         self.length = 0
 
-    def insert(self, val):
+    def insert(self, value):
         if self.head is None:
-            self.head = Node(val)
+            self.head = Node(value)
             self.tail = self.head
         else:
-            new_node = Node(val)
+            new_node = Node(value)
             self.tail.next = new_node
             self.tail = new_node
         self.length += 1
 
-    def search(self, val):
+    def search(self, value):
         curr = self.head
-        while curr is not None and curr.value != val:
+        while curr is not None and curr.val != value:
             curr = curr.next
         if curr is None:
             return False
         return True
 
-    def remove(self, val):
+    def remove(self, value):
         if self.length == 0:
             return False
-        if self.head.value == val:
+        if self.head.val == value:
             if self.length == 1:
                 self.head = None
                 self.tail = None
@@ -44,7 +44,7 @@ class LinkedList:
                 self.length -= 1
                 return True
         curr = self.head
-        while curr.next is not None and curr.next.value != val:
+        while curr.next is not None and curr.next.val != value:
             curr = curr.next
         if curr.next is None:
             return False
@@ -68,12 +68,12 @@ class Queue:
         self.tail = None
         self.length = 0
 
-    def push(self, val):
+    def push(self, value):
         if self.head is None:
-            self.head = Node(val)
+            self.head = Node(value)
             self.tail = self.head
         else:
-            new_node = Node(val)
+            new_node = Node(value)
             self.tail.next = new_node
             self.tail = new_node
         self.length += 1
@@ -84,12 +84,12 @@ class Queue:
 
         temp = self.head
         self.head = self.head.next
-        val = temp.value
+        value = temp.val
         del temp
-        return val
+        return value
 
     def peek(self):
         if self.length == 0:
             raise Exception
 
-        return self.head.value
+        return self.head.val
