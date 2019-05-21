@@ -115,6 +115,21 @@ class BST:
         self.postorder(node.right, func)
         func(node)
 
+    @staticmethod
+    def is_bst(root):
+        return BST.is_bst_util(root, -2 ** 32, 2 ** 32 - 1)
+
+    @staticmethod
+    def is_bst_util(node, mini, maxi):
+        if node is None:
+            return True
+
+        if node.val < mini or node.val > maxi:
+            return False
+
+        return BST.is_bst_util(node.left, mini, node.val - 1) \
+               and BST.is_bst_util(node.right, node.val + 1, maxi)
+
 
 def passthrough(node):
     return
@@ -122,44 +137,44 @@ def passthrough(node):
 
 def createbst(l, r, tree, array):
     if l <= r:
-        mid = int((l + r) / 2)
+        mid = (l + r) // 2
         tree.insert(array[mid])
         createbst(l, mid - 1, tree, array)
         createbst(mid + 1, r, tree, array)
 
 
 if __name__ == "__main__":
-    tree = BST()
+    test = BST()
     vals = [2, 1, 4, 9, 10, 6, 5, 8, 7]
     val_preorder = []
-    for val in vals:
-        tree.insert(val)
-    tree.insert(9)
-    tree.preorder(tree.root, print)
+    for z in vals:
+        test.insert(z)
+    test.insert(9)
+    test.preorder(test.root, print)
     print()
-    for val in vals:
-        print(tree.contains(val))
-    print(tree.contains(98))
-    print(tree.contains(-5))
+    for z in vals:
+        print(test.contains(z))
+    print(test.contains(98))
+    print(test.contains(-5))
 
-    tree.remove_node(9)
-    tree.preorder(tree.root, print)
+    test.remove_node(9)
+    test.preorder(test.root, print)
 
     vals = [7, 9, 4, 3, 2]
     vals2 = [1, 0, 6, 5, 8]
-    tree = BST()
+    test = BST()
     tree2 = BST()
-    for val, val2 in zip(vals, vals2):
-        tree.insert(val)
+    for z, val2 in zip(vals, vals2):
+        test.insert(z)
         tree2.insert(val2)
-    tree.insert(-1)
-    BST.preorder(tree.root, print)
+    test.insert(-1)
+    BST.preorder(test.root, print)
     print()
     BST.preorder(tree2.root, print)
 
     in_order = []
     in_order2 = []
-    BST.inorder(tree.root, in_order.append)
+    BST.inorder(test.root, in_order.append)
     BST.inorder(tree2.root, in_order2.append)
     print(in_order)
     print(in_order2)
@@ -182,3 +197,5 @@ if __name__ == "__main__":
     merged_tree = BST()
     createbst(0, len(merged) - 1, merged_tree, merged)
     merged_tree.preorder(merged_tree.root, print)
+
+    print(BST.is_bst(merged_tree.root))
