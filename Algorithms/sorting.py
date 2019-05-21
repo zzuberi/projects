@@ -54,7 +54,7 @@ class MergeSort:
 
         if i == mid + 1:
             merged.extend(a[j:r + 1])
-        elif j == r + 1:
+        else:
             merged.extend(a[i:mid + 1])
         return merged
 
