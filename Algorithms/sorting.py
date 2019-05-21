@@ -13,7 +13,7 @@ class QuickSort:
 
     @staticmethod
     def partition(a, l, r):
-        pivot = a[int((l + r) / 2)]
+        pivot = a[(l + r) // 2]
         while l <= r:
             while a[l] < pivot: l += 1
             while a[r] > pivot: r -= 1
@@ -34,7 +34,7 @@ class MergeSort:
     @staticmethod
     def mergesort(a, l, r):
         if l < r:
-            mid = int((l + r) / 2)
+            mid = (l + r) // 2
             MergeSort.mergesort(a, l, mid)
             MergeSort.mergesort(a, mid + 1, r)
             a[l:r + 1] = MergeSort.merge(a, l, mid, r)
