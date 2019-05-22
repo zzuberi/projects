@@ -88,7 +88,7 @@ def not_found_mid():
     assert (cls_true == result)
 
 
-def closest_ends():
+def closest_mid():
     a = list(range(0, 12, 2))
     a.append(13)
     cls_true = 6
@@ -97,6 +97,16 @@ def closest_ends():
     a.insert(0, -2)
     cls_true = 0
     result = ClosestSearch.search(a, -1)
+    assert (cls_true == result)
+
+
+def closest_ends():
+    a = list(range(0, 12, 2))
+    cls_true = 5
+    result = ClosestSearch.search(a, 10)
+    assert (cls_true == result)
+    cls_true = 0
+    result = ClosestSearch.search(a, 0)
     assert (cls_true == result)
 
 
