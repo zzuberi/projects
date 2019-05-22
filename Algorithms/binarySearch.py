@@ -18,7 +18,7 @@ class BinarySearch:
         return BinarySearch.binarysearch(a, x, 0, len(a) - 1)
 
 
-class ClosestSearch():
+class ClosestSearch:
 
     @staticmethod
     def closestsearch(a, x, l, r):
