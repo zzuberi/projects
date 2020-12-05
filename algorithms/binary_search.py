@@ -110,9 +110,21 @@ def closest_ends():
     assert (cls_true == result)
 
 
+def small_list():
+    a = [1]
+    bin_true = 0
+    result = BinarySearch.search(a, 1)
+    assert (bin_true == result)
+    cls_true = 0
+    result = ClosestSearch.search(a, 4)
+    assert(cls_true == result)
+
+
 if __name__ == '__main__':
     standard_search()
     not_found_large()
     not_found_small()
     not_found_mid()
+    closest_mid()
     closest_ends()
+    small_list()

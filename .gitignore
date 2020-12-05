@@ -1,0 +1,9 @@
+gaussian_bdr_classifier/test/
+gaussian_bdr_classifier/test_resources/
+gaussian_bdr_classifier/__pycache__/
+
+svm_image_classifier/test/
+svm_image_classifier/test_resources/
+svm_image_classifier/__pycache__/
+
+.idea/
