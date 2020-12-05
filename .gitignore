@@ -7,3 +7,4 @@ svm_image_classifier/test_resources/
 svm_image_classifier/__pycache__/
 
 .idea/
+.vscode/
