@@ -9,7 +9,7 @@ class KMeans:
         self.means = None
 
     def train(self, x, k, thresh=.001, max_iters=300):
-        d, n = x.shape
+        d, _ = x.shape
         data = x / np.linalg.norm(x, axis=0)
         self.means = np.random.rand(d, k)
         self.means = self.means / np.linalg.norm(self.means, axis=0)
